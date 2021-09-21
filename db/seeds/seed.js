@@ -1,6 +1,6 @@
 const db = require('../connection.js');
 const format = require('pg-format');
-const { formatCategories, formatUsers, formatReviews } = require('../utils/data-manipulation');
+const { formatCategories, formatUsers, formatReviews, formatComments } = require('../utils/data-manipulation');
 
 const seed = async (data) => {
   const { categoryData, commentData, reviewData, userData } = data;
@@ -67,7 +67,7 @@ const seed = async (data) => {
   );
   await db.query(categoryQuery);
 
-  // users
+    // users
   const formattedUsers = formatUsers(userData);
   const userQuery = format(
     `INSERT INTO users
@@ -89,9 +89,20 @@ const seed = async (data) => {
   );
   await db.query(reviewQuery);
   
+    // comments
+  const formattedComments = formatComments(commentData);
+  const commentQuery = format(
+    `INSERT INTO comments
+      (author, review_id, votes, created_at, body)
+    VALUES
+      %L;`,
+    formattedComments
+  );
+  await db.query(commentQuery);
 
-  // const testTable = await db.query('SELECT * FROM reviews;')
-  // console.log(testTable.rows)
+
+  const testTable = await db.query('SELECT * FROM comments;')
+  console.log(testTable.rows)
 
 
 
