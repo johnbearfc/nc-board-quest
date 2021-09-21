@@ -1,7 +1,17 @@
 const {
     fetchReview,
-    updateReview 
+    updateReview, 
+    fetchAllReviews
 } = require('../models/reviews.model')
+
+exports.getAllReviews = async (req, res, next) => {
+    try {
+        const reviews = await fetchAllReviews();
+        res.status(200).send({ reviews });
+    } catch (err) {
+        next(err);
+    }
+}
 
 exports.getReview = async (req, res, next) => {
     try { 
