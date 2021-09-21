@@ -8,6 +8,11 @@ exports.fetchReview = async (review_id) => {
         WHERE reviews.review_id = $1
         GROUP BY reviews.review_id;`, 
         [review_id]
-    )
+    );
+
+    if(!result.rows[0]) {
+        return Promise.reject({ status: 404, msg: 'Review Not Found' });
+    }
+
     return result.rows[0];
 }
