@@ -8,7 +8,7 @@ exports.handlePSQL400Errors = ((err, req, res, next) => {
     } else {
         next(err);
     }
-})
+});
 
 exports.handleCustomErrors = ((err, req, res, next) => {
     if (err.status) {
@@ -16,4 +16,4 @@ exports.handleCustomErrors = ((err, req, res, next) => {
     } else {
         next(err);
     }
-})
+});

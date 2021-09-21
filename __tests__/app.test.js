@@ -56,7 +56,7 @@ describe('/api/reviews', () => {
                     comment_count: '3'
                 })
             });
-            test('400 - returns bad request message when passed invalid review_id format', async () => {
+            test('400 - bad request: invalid review_id format', async () => {
                 const { body } = await request(app)
                     .get('/api/reviews/invalid')
                     .expect(400);
@@ -69,6 +69,39 @@ describe('/api/reviews', () => {
                     .expect(404);
 
                 expect(body.msg).toBe('Review Not Found');
+            });
+        });
+        describe('PATCH', () => {
+            test('200 - review votes successfully updated', async () => {
+                const { body } = await request(app)
+                    .patch('/api/reviews/1')
+                    .send({ inc_votes : 1 })
+                    .expect(200)
+                
+                expect(body.review.votes).toBe(2);
+            });
+            test('400 - bad request: invalid review_id format', async () => {
+                const { body } = await request(app)
+                    .get('/api/reviews/invalid')
+                    .expect(400);
+                
+                expect(body.msg).toBe('Bad Request');
+            });
+            test('400 - bad request: invalid vote format', async () => {
+                const { body } = await request(app)
+                    .patch('/api/reviews/1')
+                    .send({ inc_votes : 'dog' })
+                    .expect(400)
+                
+                expect(body.msg).toBe('Bad Request');
+            });
+            test('400 - bad request: vote not included', async () => {
+                const { body } = await request(app)
+                    .patch('/api/reviews/1')
+                    .send({})
+                    .expect(400)
+                
+                expect(body.msg).toBe('Bad Request: vote not included');
             });
         });
     });
