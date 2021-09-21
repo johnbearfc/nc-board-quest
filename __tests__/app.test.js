@@ -7,6 +7,17 @@ const request = require("supertest");
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
+describe('handling unavailable route', () => {
+    test('404 - returns error message when passed invalid URL', async () => {
+        const { body } = await request(app)
+                .get('/invalid')
+                .expect(404);
+
+        expect(body.msg).toBe('Invalid URL!');
+    });
+});
+
+
 describe('/api/categories', () => {
     describe('GET', () => {
         test('200 - returns array of all categories', async () => {
