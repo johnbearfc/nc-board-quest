@@ -5,7 +5,7 @@ const { formatCategories, formatUsers, formatReviews, formatComments } = require
 const seed = async (data) => {
   const { categoryData, commentData, reviewData, userData } = data;
 
-  // DROP TABLES:
+  // DROP TABLES --------------
   await db.query(`
     DROP TABLE IF EXISTS comments;
     DROP TABLE IF EXISTS reviews;
@@ -13,7 +13,7 @@ const seed = async (data) => {
     DROP TABLE IF EXISTS categories;`
   );
 
-  // CREATE TABLES:
+  // CREATE TABLES ------------
     // categories
   await db.query(
     `CREATE TABLE categories (
@@ -55,7 +55,7 @@ const seed = async (data) => {
     );`
   );
 
-  // INSERT DATA:
+  // INSERT DATA --------------
     // categories
   const formattedCategories = formatCategories(categoryData);
   const categoryQuery = format(
@@ -99,13 +99,6 @@ const seed = async (data) => {
     formattedComments
   );
   await db.query(commentQuery);
-
-
-  const testTable = await db.query('SELECT * FROM comments;')
-  console.log(testTable.rows)
-
-
-
 };
 
 module.exports = seed;
