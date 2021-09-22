@@ -177,5 +177,46 @@ describe('/api/reviews', () => {
                 expect(body.msg).toBe('Bad Request: vote not included');
             });
         });
+        describe('/comments', () => {
+            describe('GET', () => {
+                test('200 - returns an array of comments for given review_id', async () => {
+                    const { body } = await request(app)
+                        .get('/api/reviews/2/comments')
+                        .expect(200);
+
+                    expect(body.comments).toHaveLength(3)
+                    body.comments.forEach(comment => {
+                        expect(comment).toMatchObject({
+                            comment_id: expect.any(Number),
+                            votes: expect.any(Number),
+                            created_at: expect.any(String),
+                            author: expect.any(String),
+                            body: expect.any(String)
+                        })
+                    })
+                });
+                test('400 - bad request: invalid review_id format', async () => {
+                    const { body } = await request(app)
+                        .get('/api/reviews/invalid/comments')
+                        .expect(400);
+                    
+                    expect(body.msg).toBe('Bad Request');
+                });
+                test('404 - returns not found message when passed valid but non-existent review_id', async () => {
+                    const { body } = await request(app)
+                        .get('/api/reviews/666/comments')
+                        .expect(404);
+    
+                    expect(body.msg).toBe('Not Found: review does not exist');
+                });
+                test('200 - OK: review exists but without any comments', async () => {
+                    const { body } = await request(app)
+                        .get('/api/reviews/1/comments')
+                        .expect(200)
+                    
+                    expect(body.comments).toHaveLength(0);
+                });
+            });
+        });
     });
 });
