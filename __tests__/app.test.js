@@ -8,7 +8,7 @@ beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
 describe('handling invalid path', () => {
-    test('404 - returns error message when passed invalid URL', async () => {
+    test('404 - not found: invalid URL', async () => {
         const { body } = await request(app)
             .get('/invalid')
             .expect(404);
@@ -23,7 +23,7 @@ describe('/api', () => {
             const { body } = await request(app)
                 .get('/api')
                 .expect(200)
-            
+
                 body.endpoints.forEach(endpoint => {
                     expect(endpoint).toMatchObject({
                         path: expect.any(String),
@@ -111,7 +111,7 @@ describe('/api/reviews', () => {
             
             expect(body.msg).toBe('Bad Request');
         });
-        test('404 - Not Found: ?category = nonexistent category', async () => {
+        test('404 - not found: ?category = nonexistent category', async () => {
             const { body } = await request(app)
                 .get('/api/reviews?category=dog')
                 .expect(404)
@@ -153,7 +153,7 @@ describe('/api/reviews', () => {
                 
                 expect(body.msg).toBe('Bad Request');
             });
-            test('404 - returns not found message when passed valid but non-existent review_id', async () => {
+            test('404 - not found: valid but non-existent review_id', async () => {
                 const { body } = await request(app)
                     .get('/api/reviews/666')
                     .expect(404);
@@ -219,7 +219,7 @@ describe('/api/reviews', () => {
                     
                     expect(body.msg).toBe('Bad Request');
                 });
-                test('404 - returns not found message when passed valid but non-existent review_id', async () => {
+                test('404 - not found: valid but non-existent review_id', async () => {
                     const { body } = await request(app)
                         .get('/api/reviews/666/comments')
                         .expect(404);
