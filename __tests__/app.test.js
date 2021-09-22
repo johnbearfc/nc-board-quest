@@ -17,6 +17,23 @@ describe('handling invalid path', () => {
     });
 });
 
+describe('/api', () => {
+    describe('GET', () => {
+        test('200 - describes all possible endpoints', async () => {
+            const { body } = await request(app)
+                .get('/api')
+                .expect(200)
+            
+                body.endpoints.forEach(endpoint => {
+                    expect(endpoint).toMatchObject({
+                        path: expect.any(String),
+                        methods: expect.any(Array)
+                    })
+                })
+        });
+    });
+});
+
 describe('/api/categories', () => {
     describe('GET', () => {
         test('200 - returns array of all categories', async () => {
