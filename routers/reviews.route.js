@@ -5,7 +5,8 @@ const {
     getAllReviews 
 } = require('../controllers/reviews.controller');
 const { 
-    getComments 
+    getComments, 
+    postComment 
 } = require('../controllers/comments.controller');
 
 const reviewsRouter = express.Router();
@@ -18,7 +19,7 @@ reviewsRouter.route('/:review_id')
 
 reviewsRouter.route('/:review_id/comments')
              .get(getComments)
-            //  .post()   
+             .post(postComment)   
 
 
 module.exports = reviewsRouter;

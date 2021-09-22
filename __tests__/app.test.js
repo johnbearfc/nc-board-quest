@@ -174,7 +174,7 @@ describe('/api/reviews', () => {
                     .send({})
                     .expect(400)
                 
-                expect(body.msg).toBe('Bad Request: vote not included');
+                expect(body.msg).toBe('Bad Request');
             });
         });
         describe('/comments', () => {
@@ -215,6 +215,47 @@ describe('/api/reviews', () => {
                         .expect(200)
                     
                     expect(body.comments).toHaveLength(0);
+                });
+            });
+            describe('POST', () => {
+                test('201 - comment successfully posted', async () => {
+                    const { body } = await request(app)
+                        .post('/api/reviews/1/comments')
+                        .send({
+                            username: 'bainesface',
+                            body: 'just amazing'
+                        })
+                        .expect(201)
+
+                    expect(body.comment.comment_id).toBe(7);
+                    expect(body.comment.author).toBe('bainesface');
+                    expect(body.comment.body).toBe('just amazing');
+                });
+                test('400 - bad request: invalid review_id format', async () => {
+                    const { body } = await request(app)
+                        .post('/api/reviews/invalid/comments')
+                        .expect(400);
+                    
+                    expect(body.msg).toBe('Bad Request');
+                });
+                test('400 - bad request: invalid post format', async () => {
+                    const { body } = await request(app)
+                        .post('/api/reviews/1/comments')
+                        .send({
+                            username: 'john',
+                            body: 'just ok'
+                        })
+                        .expect(400);
+                    
+                    expect(body.msg).toBe('Bad Request');
+                });
+                test('400 - bad request: post body incomplete', async () => {
+                    const { body } = await request(app)
+                        .post('/api/reviews/1/comments')
+                        .send({})
+                        .expect(400);
+                    
+                    expect(body.msg).toBe('Bad Request');
                 });
             });
         });
