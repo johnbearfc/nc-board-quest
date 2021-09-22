@@ -77,7 +77,7 @@ exports.fetchReview = async (review_id) => {
 
 exports.updateReview = async (review_id, inc_votes) => {
     if (!inc_votes) {
-        return Promise.reject({ status: 400, msg: 'Bad Request: vote not included' });
+        return Promise.reject({ status: 400, msg: 'Bad Request' });
     }
 
     const result = await db.query(
