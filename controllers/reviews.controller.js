@@ -6,7 +6,9 @@ const {
 
 exports.getAllReviews = async (req, res, next) => {
     try {
-        const reviews = await fetchAllReviews();
+        const { sort_by, order, category } = req.query;
+
+        const reviews = await fetchAllReviews(sort_by, order, category);
         res.status(200).send({ reviews });
     } catch (err) {
         next(err);

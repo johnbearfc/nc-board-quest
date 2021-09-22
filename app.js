@@ -8,7 +8,7 @@ app.use(express.json());
 app.use('/api', apiRouter);
 
 // ERROR HANDLING ------
-app.use('*', InvalidURL);
+app.use('/*', InvalidURL);
 app.use(handlePSQL400Errors);
 app.use(handleCustomErrors);
 

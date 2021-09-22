@@ -7,7 +7,7 @@ const request = require("supertest");
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
-describe('handling unavailable route', () => {
+describe('handling invalid path', () => {
     test('404 - returns error message when passed invalid URL', async () => {
         const { body } = await request(app)
             .get('/invalid')
@@ -37,7 +37,7 @@ describe('/api/categories', () => {
 
 describe('/api/reviews', () => {
     describe('GET', () => {
-        test('200 - returns array of all reviews including comment_count for each, sorted by date by default', async () => {
+        test('200 - returns array of all reviews including comment_count for each, sorted by ascending date by default', async () => {
             const { body } = await request(app)
                 .get('/api/reviews')
                 .expect(200)
@@ -57,7 +57,56 @@ describe('/api/reviews', () => {
                     comment_count: expect.any(String)
                 });
             });
-            // expect(body.reviews).toBeSortedBy('date');
+            expect(body.reviews).toBeSortedBy('created_at');
+        });
+        test('200 - returns reviews ordered by queried sort_by', async () => {
+            const { body } = await request(app)
+                .get('/api/reviews?sort_by=review_id')
+                .expect(200)
+            
+            expect(body.reviews).toBeSortedBy('review_id');
+        });
+        test('200 - returns reviews ordered by queried ASC/DESC order', async () => {
+            const { body } = await request(app)
+                .get('/api/reviews?order=DESC')
+                .expect(200)
+            
+            expect(body.reviews).toBeSortedBy('created_at', { descending: true });
+        });
+        test('200 - returns reviews filtered by queried category', async () => {
+            const { body } = await request(app)
+                .get('/api/reviews?category=dexterity')
+                .expect(200)
+            
+            expect(body.reviews).toHaveLength(1);
+        });
+        test('400 - bad request: ?sort_by = invalid column', async () => {
+            const { body } = await request(app)
+                .get('/api/reviews?sort_by=invalid')
+                .expect(400)
+            
+            expect(body.msg).toBe('Bad Request');
+        });
+        test('400 - bad request: ?order = invalid order format', async () => {
+            const { body } = await request(app)
+                .get('/api/reviews?order=invalid')
+                .expect(400)
+            
+            expect(body.msg).toBe('Bad Request');
+        });
+        test('404 - Not Found: ?category = nonexistent category', async () => {
+            const { body } = await request(app)
+                .get('/api/reviews?category=dog')
+                .expect(404)
+            
+            expect(body.msg).toBe('Not Found: category does not exist');
+        });
+        test('200 - OK: ?category = category exists but without any associated reviews', async () => {
+            const { body } = await request(app)
+                .get('/api/reviews?category=children\'s games')
+                .expect(200)
+            
+            expect(body.reviews).toHaveLength(0);
         });
     });
     describe('/:review_id', () => {
@@ -92,7 +141,7 @@ describe('/api/reviews', () => {
                     .get('/api/reviews/666')
                     .expect(404);
 
-                expect(body.msg).toBe('Review Not Found');
+                expect(body.msg).toBe('Not Found: review does not exist');
             });
         });
         describe('PATCH', () => {
