@@ -296,3 +296,20 @@ describe('/api/comments', () => {
         });
     });
 });
+
+describe('/api/users', () => {
+    describe('GET', () => {
+        test('200 - responds with all users (username only)', async () => {
+            const { body } = await request(app)
+                .get('/api/users')
+                .expect(200)
+
+            expect(body.users).toHaveLength(4);
+            body.users.forEach(user => {
+                expect(user).toMatchObject({
+                    username: expect.any(String)
+                });
+            })
+        });
+    });
+});
