@@ -1,7 +1,5 @@
 # 🎲 Board Quest API 🎲
 
-## Background
-
 Welcome to the Board Quest API, a portfolio project designed to emulate a real world backend service.
 
 Board Quest allows table top enthusiasts to explore the world of board games together and speak of their tales along the way. 
