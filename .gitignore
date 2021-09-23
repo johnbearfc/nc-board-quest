@@ -1,3 +1,5 @@
 node_modules
 .env.*
 project.README.md
+project.error-handling.md
+project.hosting.md
