@@ -1,4 +1,8 @@
-const { fetchComments, insertComment } = require("../models/comments.model")
+const { 
+    fetchComments, 
+    insertComment, 
+    removeCommentById 
+} = require("../models/comments.model")
 
 
 exports.getComments = async (req, res, next) => {
@@ -21,5 +25,16 @@ exports.postComment = async (req, res, next) => {
         res.status(201).send({ comment });
     } catch (err) {
         next(err);
+    }
+}
+
+exports.deleteCommentById = async (req, res, next) => {
+    try {
+        const { comment_id } = req.params;
+
+        const removedComment = await removeCommentById(comment_id);
+        res.status(204).send({});
+    } catch (err) {
+        next(err)
     }
 }

@@ -278,3 +278,21 @@ describe('/api/reviews', () => {
         });
     });
 });
+
+describe('/api/comments', () => {
+    describe('/:comment_id', () => {
+        test('204 - deletes the given comment by comment_id', async () => {
+            const { body } = await request(app)
+                .delete(`/api/comments/1`)
+                .expect(204)
+
+            expect(body).toEqual({});
+
+            const comments = await db.query(
+                `SELECT * FROM comments;`
+            );
+
+            expect(comments.rows).toHaveLength(5);
+        });
+    });
+});
