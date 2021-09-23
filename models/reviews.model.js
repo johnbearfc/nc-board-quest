@@ -5,8 +5,7 @@ exports.fetchAllReviews = async (sort_by = 'created_at', order = 'ASC', category
         'owner', 
         'title', 
         'review_id', 
-        'category', 
-        'review_id', 
+        'category',  
         'created_at',
         'votes',
         'comment_count'
