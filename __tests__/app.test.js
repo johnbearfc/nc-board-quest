@@ -71,7 +71,7 @@ describe('/api/reviews', () => {
                     category: expect.any(String),
                     owner: expect.any(String),
                     created_at: expect.any(String),
-                    comment_count: expect.any(String)
+                    comment_count: expect.any(Number)
                 });
             });
             expect(body.reviews).toBeSortedBy('created_at');
@@ -143,7 +143,7 @@ describe('/api/reviews', () => {
                     category: expect.any(String),
                     owner: expect.any(String),
                     created_at: expect.any(String),
-                    comment_count: '3'
+                    comment_count: 3
                 })
             });
             test('400 - bad request: invalid review_id format', async () => {

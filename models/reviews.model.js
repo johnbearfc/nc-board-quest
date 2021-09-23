@@ -54,6 +54,10 @@ exports.fetchAllReviews = async (sort_by = 'created_at', order = 'ASC', category
         }
     }
 
+    result.rows.forEach(review => {
+        review.comment_count = Number(review.comment_count);  
+    });
+
     return result.rows;
 }
 
@@ -70,6 +74,8 @@ exports.fetchReview = async (review_id) => {
     if(!result.rows[0]) {
         return Promise.reject({ status: 404, msg: 'Not Found: review does not exist' });
     }
+
+    result.rows[0].comment_count = Number(result.rows[0].comment_count);
 
     return result.rows[0];
 }
