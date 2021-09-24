@@ -39,6 +39,6 @@ jobs:
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          heroku_api_key: ${{ secrets.e18634a8-8304-4d34-8762-299ff8dde38e }}
-          heroku_app_name: ${{ secrets.nc-board-quest }}
-          heroku_email: ${{ secrets.jclleggett@gmail.com }}
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
