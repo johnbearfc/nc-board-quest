@@ -17,7 +17,13 @@ exports.getAllReviews = async (req, res, next) => {
         const reviews = await fetchAllReviews(
             sort_by, order, category, limit, p
         );
-        res.status(200).send({ reviews });
+
+        const reviewsObj = {
+            total_count: reviews[0],
+            reviews: reviews[1]
+        }
+
+        res.status(200).send(reviewsObj);
     } catch (err) {
         next(err);
     }

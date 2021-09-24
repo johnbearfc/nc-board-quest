@@ -53,7 +53,7 @@ describe('/api/categories', () => {
 });
 
 describe('/api/reviews', () => {
-    describe.only('GET', () => {
+    describe('GET', () => {
         test('200 - returns array of first 10 reviews by default, including comment_count for each and sorted by ascending date by default', async () => {
             const { body } = await request(app)
                 .get('/api/reviews')
@@ -75,6 +75,7 @@ describe('/api/reviews', () => {
                 });
             });
             expect(body.reviews).toBeSortedBy('created_at');
+            // expect(body.total_count).toBe(13);
         });
         test('200 - returns reviews ordered by queried sort_by', async () => {
             const { body } = await request(app)
@@ -218,7 +219,7 @@ describe('/api/reviews', () => {
         });
         describe('/comments', () => {
             describe('GET', () => {
-                test('200 - returns an array of comments for given review_id', async () => {
+                test('200 - returns with first 10 comments by default for given review_id', async () => {
                     const { body } = await request(app)
                         .get('/api/reviews/2/comments')
                         .expect(200);
@@ -254,6 +255,20 @@ describe('/api/reviews', () => {
                         .expect(200)
                     
                     expect(body.comments).toHaveLength(0);
+                });
+                test('200 - ?limit = returns first specified number of comments', async () => {
+                    const { body } = await request(app)
+                        .get('/api/reviews/3/comments?limit=2')
+                        .expect(200)
+                    
+                    expect(body.comments).toHaveLength(2);
+                });
+                test('200 - ?p = returns with specified page and limit', async () => {
+                    const { body } = await request(app)
+                        .get('/api/reviews/3/comments?limit=2&p=2')
+                        .expect(200)
+        
+                    expect(body.comments).toHaveLength(1);
                 });
             });
             describe('POST', () => {

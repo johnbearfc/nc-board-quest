@@ -25,7 +25,7 @@ exports.fetchAllReviews = async (sort_by = 'created_at', order = 'ASC', category
 
     // building query string ------
     let queryStr = 
-        `SELECT reviews.*, count(comments.comment_id) as comment_count 
+        `SELECT reviews.*, count(comments.comment_id) as comment_count, count(*) OVER() as total
         FROM reviews 
         LEFT JOIN comments 
         ON reviews.review_id = comments.review_id`;
@@ -43,6 +43,7 @@ exports.fetchAllReviews = async (sort_by = 'created_at', order = 'ASC', category
 
 
     const result = await db.query(queryStr, queryValues);
+    let total_count = 0;
 
     // checking if category is found ------
     if(!result.rows[0]) {
@@ -55,13 +56,18 @@ exports.fetchAllReviews = async (sort_by = 'created_at', order = 'ASC', category
         if(!categoryResults.rows[0]) {
             return Promise.reject({ status: 404, msg: 'Not Found: category does not exist' });
         }
+
+        const total_count = 0;
+    } else {
+        const total_count = Number(result.rows[0].total);
     }
-
+    
     result.rows.forEach(review => {
-        review.comment_count = Number(review.comment_count);  
+        review.comment_count = Number(review.comment_count);
+        delete review.total;  
     });
-
-    return result.rows;
+    
+    return [total_count, result.rows];
 }
 
 exports.fetchReviewById = async (review_id) => {

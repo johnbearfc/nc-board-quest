@@ -1,18 +1,21 @@
 const db = require('../db/connection');
 
-exports.fetchComments = async (review_id) => {
+exports.fetchComments = async (review_id, limit = 10, p = 1) => {
+    const offset = (p - 1) * limit;
+    
     const result = await db.query(
         `SELECT comment_id, votes, created_at, author, body
         FROM comments
-        WHERE review_id = $1;`,
-        [review_id]
+        WHERE review_id = $1
+        LIMIT $2 OFFSET $3;`,
+        [review_id, limit, offset]
     );
 
     if (!result.rows[0]) {
         const reviewsResult = await db.query(
             `SELECT * FROM reviews
-            WHERE review_id = $1;`,
-            [review_id]
+            WHERE review_id = $1`,
+            [review_id] 
         );
 
         if (!reviewsResult.rows[0]) {
