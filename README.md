@@ -100,7 +100,7 @@ Responds with:
 
 Responds with all the reviews
 
-Accept queries:
+Accepts queries:
 
 - `sort_by`, which sorts the reviews by any valid column (defaults to date)
 - `order`, which can be set to `asc` or `desc` for ascending or descending (defaults to descending)
@@ -113,6 +113,11 @@ Accept queries:
 #### 🎲 **GET /api/reviews/:review_id/comments**
 
 Responds with the comment linked to the `review_id`
+
+Accepts queries:
+
+- `limit`, which limits the number of responses (defaults to 10)
+- `p`, specifies the page at which to start
 
 <br />
 
