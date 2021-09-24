@@ -57,10 +57,11 @@ exports.fetchAllReviews = async (sort_by = 'created_at', order = 'ASC', category
             return Promise.reject({ status: 404, msg: 'Not Found: category does not exist' });
         }
 
-        const total_count = 0;
+        total_count = 0;
     } else {
-        const total_count = Number(result.rows[0].total);
+        total_count = Number(result.rows[0].total);
     }
+
     
     result.rows.forEach(review => {
         review.comment_count = Number(review.comment_count);

@@ -75,7 +75,7 @@ describe('/api/reviews', () => {
                 });
             });
             expect(body.reviews).toBeSortedBy('created_at');
-            // expect(body.total_count).toBe(13);
+            expect(body.total_count).toBe(13);
         });
         test('200 - returns reviews ordered by queried sort_by', async () => {
             const { body } = await request(app)
