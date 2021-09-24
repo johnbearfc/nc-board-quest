@@ -327,5 +327,25 @@ describe('/api/users', () => {
                 });
             })
         });
+        describe('/:username', () => {
+            test('200 - responds with correct user object', async () => {
+                const { body } = await request(app)
+                    .get('/api/users/mallionaire')
+                    .expect(200)
+
+                expect(body.user).toMatchObject({
+                    username: 'mallionaire',
+                    avatar_url: 'https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg',
+                    name: 'haz'
+                });
+            });
+            test('404 - not found: non-existent review_id', async () => {
+                const { body } = await request(app)
+                    .get('/api/users/notaperson')
+                    .expect(404);
+
+                expect(body.msg).toBe('Not Found: user does not exist');
+            });
+        });
     });
 });
