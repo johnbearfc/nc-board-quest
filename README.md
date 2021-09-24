@@ -105,6 +105,8 @@ Accept queries:
 - `sort_by`, which sorts the reviews by any valid column (defaults to date)
 - `order`, which can be set to `asc` or `desc` for ascending or descending (defaults to descending)
 - `category`, which filters the reviews by the category value specified in the query
+- `limit`, which limits the number of responses (defaults to 10)
+- `p`, specifies the page at which to start
 
 <br />
 
