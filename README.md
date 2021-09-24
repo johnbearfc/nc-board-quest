@@ -53,13 +53,15 @@ All available endpoints can be viewed on the Heroku app with `/api`.
 Within the project, endpoints can be navigated through `./app.js` and corresponding files in the `./routers` folder.
 
 ```http
+GET /api
 GET /api/categories
 GET /api/reviews/:review_id
 PATCH /api/reviews/:review_id
 GET /api/reviews
 GET /api/reviews/:review_id/comments
 POST /api/reviews/:review_id/comments
-GET /api
+DELETE /api/comments/:comment_id
+GET /api/users
 ```
 
 #### 🎲 **GET /api/categories**
@@ -124,5 +126,16 @@ Responds with:
 - the posted comment
 
 <br />
+
+#### 🎲 **DELETE /api/comments/:comment_id**
+
+Deletes the given comment by `comment_id`
+
+<br />
+
+#### 🎲 **GET /api/users**
+
+Responds with all users
+
 
 **Enjoy!**
