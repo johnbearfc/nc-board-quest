@@ -62,6 +62,7 @@ GET /api/reviews/:review_id/comments
 POST /api/reviews/:review_id/comments
 DELETE /api/comments/:comment_id
 GET /api/users
+PATCH /api/comments/:comment_id
 ```
 
 #### 🎲 **GET /api/categories**
