@@ -139,4 +139,23 @@ Responds with all users
 
 <br />
 
+#### 🎲 **PATCH /api/comments/:comment_id**
+
+Allows user to change the number of votes linked to the `comment_id`
+
+Request body accepts:
+
+- an object in the form `{ inc_votes: newVote }`
+
+  - `newVote` will indicate how much the `votes` property in the database should be updated by, e.g.
+  
+    - `{ inc_votes : 1 }` would increment the current comment's vote property by 1
+    - `{ inc_votes : -100 }` would decrement the current comment's vote property by 100
+
+Responds with:
+
+- the updated comment
+
+<br />
+
 **Enjoy!**
