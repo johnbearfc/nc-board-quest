@@ -281,18 +281,34 @@ describe('/api/reviews', () => {
 
 describe('/api/comments', () => {
     describe('/:comment_id', () => {
-        test('204 - deletes the given comment by comment_id', async () => {
-            const { body } = await request(app)
-                .delete(`/api/comments/1`)
-                .expect(204)
+        describe('DELETE', () => {
+            test('204 - deletes the given comment by comment_id', async () => {
+                const { body } = await request(app)
+                    .delete(`/api/comments/1`)
+                    .expect(204)
+    
+                expect(body).toEqual({});
+    
+                const comments = await db.query(
+                    `SELECT * FROM comments;`
+                );
+    
+                expect(comments.rows).toHaveLength(5);
+            });
+            test('400 - bad request: invalid comment_id format', async () => {
+                const { body } = await request(app)
+                    .delete('/api/comments/invalid')
+                    .expect(400);
+                
+                expect(body.msg).toBe('Bad Request');
+            });
+            test('404 - not found: valid but non-existent review_id', async () => {
+                const { body } = await request(app)
+                    .delete('/api/comments/666')
+                    .expect(404);
 
-            expect(body).toEqual({});
-
-            const comments = await db.query(
-                `SELECT * FROM comments;`
-            );
-
-            expect(comments.rows).toHaveLength(5);
+                expect(body.msg).toBe('Not Found: comment does not exist');
+            }); 
         });
     });
 });

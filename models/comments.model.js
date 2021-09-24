@@ -45,6 +45,8 @@ exports.removeCommentById = async (comment_id) => {
         RETURNING *;`,
         [comment_id]
     );
-
-    return result.rows[0];
+    
+    if(!result.rows[0]) {
+        return Promise.reject({ status: 404, msg: 'Not Found: comment does not exist' });
+    }
 }
