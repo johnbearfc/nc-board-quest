@@ -51,7 +51,7 @@ exports.removeCommentById = async (comment_id) => {
     }
 }
 
-exports.updateCommentById = async (comment_id, inc_votes) => {
+exports.updateCommentVotes = async (comment_id, inc_votes) => {
     if (!inc_votes) {
         return Promise.reject({ status: 400, msg: 'Bad Request' });
     }
