@@ -137,5 +137,6 @@ Deletes the given comment by `comment_id`
 
 Responds with all users
 
+<br />
 
 **Enjoy!**
