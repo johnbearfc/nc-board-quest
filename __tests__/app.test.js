@@ -172,7 +172,7 @@ describe('/api/reviews', () => {
             });
             test('400 - bad request: invalid review_id format', async () => {
                 const { body } = await request(app)
-                    .get('/api/reviews/invalid')
+                    .patch('/api/reviews/invalid')
                     .expect(400);
                 
                 expect(body.msg).toBe('Bad Request');
@@ -310,6 +310,39 @@ describe('/api/comments', () => {
                 expect(body.msg).toBe('Not Found: comment does not exist');
             }); 
         });
+        describe('PATCH', () => {
+            test('200 - comment votes successfully updated', async () => {
+                const { body } = await request(app)
+                    .patch('/api/comments/1')
+                    .send({ inc_votes: 1 })
+                    .expect(200)
+
+                expect(body.comment.votes).toBe(17);
+            });
+            test('400 - bad request: invalid comment_id format', async () => {
+                const { body } = await request(app)
+                    .patch('/api/comments/invalid')
+                    .expect(400);
+                
+                expect(body.msg).toBe('Bad Request');
+            });
+            test('400 - bad request: invalid vote format', async () => {
+                const { body } = await request(app)
+                    .patch('/api/comments/1')
+                    .send({ inc_votes : 'dog' })
+                    .expect(400)
+                
+                expect(body.msg).toBe('Bad Request');
+            });
+            test('400 - bad request: vote not included', async () => {
+                const { body } = await request(app)
+                    .patch('/api/comments/1')
+                    .send({})
+                    .expect(400)
+                
+                expect(body.msg).toBe('Bad Request');
+            });
+        });
     });
 });
 
@@ -327,7 +360,9 @@ describe('/api/users', () => {
                 });
             })
         });
-        describe('/:username', () => {
+    });
+    describe('/:username', () => {
+        describe('GET', () => {
             test('200 - responds with correct user object', async () => {
                 const { body } = await request(app)
                     .get('/api/users/mallionaire')
