@@ -1,6 +1,8 @@
 const db = require('../db/connection');
 
-exports.fetchAllReviews = async (sort_by = 'created_at', order = 'ASC', category) => {
+exports.fetchAllReviews = async (sort_by = 'created_at', order = 'ASC', category, limit = 10, p = 1) => {
+    const offset = (p - 1) * limit;
+
     const validColumns = [
         'owner', 
         'title', 
@@ -27,16 +29,17 @@ exports.fetchAllReviews = async (sort_by = 'created_at', order = 'ASC', category
         FROM reviews 
         LEFT JOIN comments 
         ON reviews.review_id = comments.review_id`;
-    const queryValues = [];
+    const queryValues = [limit, offset];
 
 
     if (category) {
-        queryStr += ` WHERE category = $1`
+        queryStr += ` WHERE category = $3`
         queryValues.push(category);
     }
 
     queryStr += ` GROUP BY reviews.review_id
-                  ORDER BY ${sort_by} ${order};`
+                  ORDER BY ${sort_by} ${order}
+                  LIMIT $1 OFFSET $2;`
 
 
     const result = await db.query(queryStr, queryValues);
@@ -61,7 +64,7 @@ exports.fetchAllReviews = async (sort_by = 'created_at', order = 'ASC', category
     return result.rows;
 }
 
-exports.fetchReview = async (review_id) => {
+exports.fetchReviewById = async (review_id) => {
     const result = await db.query(
         `SELECT reviews.*, count(comments.comment_id) as comment_count FROM reviews 
         LEFT JOIN comments 
@@ -80,7 +83,7 @@ exports.fetchReview = async (review_id) => {
     return result.rows[0];
 }
 
-exports.updateReview = async (review_id, inc_votes) => {
+exports.updateReviewVotes = async (review_id, inc_votes) => {
     if (!inc_votes) {
         return Promise.reject({ status: 400, msg: 'Bad Request' });
     }

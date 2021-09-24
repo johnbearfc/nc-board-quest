@@ -53,13 +53,13 @@ describe('/api/categories', () => {
 });
 
 describe('/api/reviews', () => {
-    describe('GET', () => {
-        test('200 - returns array of all reviews including comment_count for each, sorted by ascending date by default', async () => {
+    describe.only('GET', () => {
+        test('200 - returns array of first 10 reviews by default, including comment_count for each and sorted by ascending date by default', async () => {
             const { body } = await request(app)
                 .get('/api/reviews')
                 .expect(200)
 
-            expect(body.reviews).toHaveLength(13);
+            expect(body.reviews).toHaveLength(10);
             body.reviews.forEach(review => {
                 expect(review).toMatchObject({
                     review_id: expect.any(Number),
@@ -124,6 +124,28 @@ describe('/api/reviews', () => {
                 .expect(200)
             
             expect(body.reviews).toHaveLength(0);
+        });
+        test('200 - ?limit = returns first specified number of reviews', async () => {
+            const { body } = await request(app)
+                .get('/api/reviews?limit=2')
+                .expect(200)
+            
+            expect(body.reviews).toHaveLength(2);
+        });
+        test('200 - ?p = returns with specified page', async () => {
+            const { body } = await request(app)
+                .get('/api/reviews?p=2')
+                .expect(200)
+
+            expect(body.reviews).toHaveLength(3);
+        });
+        test('200 - ?p = returns with specified page and limit', async () => {
+            const { body } = await request(app)
+                .get('/api/reviews?limit=2&p=2&sort_by=review_id')
+                .expect(200)
+
+            expect(body.reviews).toHaveLength(2);
+            expect(body.reviews[0].review_id).toBe(3);
         });
     });
     describe('/:review_id', () => {
