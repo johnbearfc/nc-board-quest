@@ -45,46 +45,46 @@ describe('formatReviews()', () => {
     test('returns correctly formatted values when passed an array with a multiple objects', () => {
         const testData = [{
             title: 'A',
-            review_body: 'A',
-            designer: 'A',
-            review_img_url: 'A',
-            votes: 'A',
-            category: 'A',
-            owner: 'A',
-            created_at: 'A'
-        }, {
-            title: 'B',
             review_body: 'B',
-            designer: 'B',
-            review_img_url: 'B',
-            votes: 'B',
-            category: 'B',
-            owner: 'B',
-            created_at: 'B'
+            designer: 'C',
+            review_img_url: 'D',
+            votes: 'E',
+            category: 'F',
+            owner: 'G',
+            created_at: 'H'
+        }, {
+            title: 'I',
+            review_body: 'J',
+            designer: 'K',
+            review_img_url: 'L',
+            votes: 'M',
+            category: 'N',
+            owner: 'O',
+            created_at: 'P'
         }];
-        expect(formatReviews(testData)).toEqual([['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A'], ['B', 'B', 'B', 'B', 'B', 'B', 'B', 'B']]);
+        expect(formatReviews(testData)).toEqual([['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'], ['I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']]);
     });
     test('input array is not mutated', () => {
         const testData = [{
             title: 'A',
-            review_body: 'A',
-            designer: 'A',
-            review_img_url: 'A',
-            votes: 'A',
-            category: 'A',
-            owner: 'A',
-            created_at: 'A'
+            review_body: 'B',
+            designer: 'C',
+            review_img_url: 'D',
+            votes: 'E',
+            category: 'F',
+            owner: 'G',
+            created_at: 'H'
         }];
         formatCategories(testData);
         expect(testData).toEqual([{
             title: 'A',
-            review_body: 'A',
-            designer: 'A',
-            review_img_url: 'A',
-            votes: 'A',
-            category: 'A',
-            owner: 'A',
-            created_at: 'A'
+            review_body: 'B',
+            designer: 'C',
+            review_img_url: 'D',
+            votes: 'E',
+            category: 'F',
+            owner: 'G',
+            created_at: 'H'
         }]);
     });
 });
@@ -95,36 +95,36 @@ describe('formatComments()', () => {
     });
     test('returns correctly formatted values when passed an array with a multiple objects', () => {
         const testData = [{
-            body: 'A',
-            votes: 'A',
             author: 'A',
-            review_id: 'A',
-            created_at: 'A',
+            review_id: 'B',
+            votes: 'C',
+            created_at: 'D',
+            body: 'E',
           },
           {
-            body: 'B',
-            votes: 'B',
-            author: 'B',
-            review_id: 'B',
-            created_at: 'B',
+            author: 'F',
+            review_id: 'G',
+            votes: 'H',
+            created_at: 'I',
+            body: 'J',
           }];
-        expect(formatComments(testData)).toEqual([['A', 'A', 'A', 'A', 'A'], ['B', 'B', 'B', 'B', 'B']]);
+        expect(formatComments(testData)).toEqual([['A', 'B', 'C', 'D', 'E'], ['F', 'G', 'H', 'I', 'J']]);
     });
     test('input array is not mutated', () => {
         const testData = [{
             body: 'A',
-            votes: 'A',
-            author: 'A',
-            review_id: 'A',
-            created_at: 'A',
+            votes: 'B',
+            author: 'C',
+            review_id: 'D',
+            created_at: 'E',
           }];
         formatCategories(testData);
         expect(testData).toEqual([{
             body: 'A',
-            votes: 'A',
-            author: 'A',
-            review_id: 'A',
-            created_at: 'A',
+            votes: 'B',
+            author: 'C',
+            review_id: 'D',
+            created_at: 'E',
           }]);
     });
 });

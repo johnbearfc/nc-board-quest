@@ -157,7 +157,7 @@ describe('/api/reviews', () => {
                     .expect(200);
 
                 expect(body.review).toMatchObject({
-                    review_id: expect.any(Number),
+                    review_id: 2,
                     title: expect.any(String),
                     review_body: expect.any(String),
                     designer: expect.any(String),
@@ -199,6 +199,14 @@ describe('/api/reviews', () => {
                     .expect(400);
                 
                 expect(body.msg).toBe('Bad Request');
+            });
+            test('404 - not found: valid but non-existent review_id', async () => {
+                const { body } = await request(app)
+                    .patch('/api/reviews/666')
+                    .send({ inc_votes : 1 })
+                    .expect(404);
+
+                expect(body.msg).toBe('Not Found: review does not exist');
             });
             test('400 - bad request: invalid vote format', async () => {
                 const { body } = await request(app)
@@ -279,7 +287,7 @@ describe('/api/reviews', () => {
                             username: 'bainesface',
                             body: 'just amazing'
                         })
-                        .expect(201)
+                        .expect(201);
 
                     expect(body.comment.comment_id).toBe(7);
                     expect(body.comment.author).toBe('bainesface');
@@ -291,6 +299,17 @@ describe('/api/reviews', () => {
                         .expect(400);
                     
                     expect(body.msg).toBe('Bad Request');
+                });
+                test('404 - not found: valid but non-existent review_id', async () => {
+                    const { body } = await request(app)
+                        .post('/api/reviews/666/comments')
+                        .send({
+                            username: 'bainesface',
+                            body: 'just amazing'
+                        })
+                        .expect(404);
+    
+                    expect(body.msg).toBe('Not Found: review does not exist');
                 });
                 test('400 - bad request: invalid post format', async () => {
                     const { body } = await request(app)
@@ -310,6 +329,25 @@ describe('/api/reviews', () => {
                         .expect(400);
                     
                     expect(body.msg).toBe('Bad Request');
+                });
+                test('201 - ignores unnecessary properties', async () => {
+                    const { body } = await request(app)
+                        .post('/api/reviews/1/comments')
+                        .send({
+                            username: 'bainesface',
+                            body: 'just amazing',
+                            stars: 5
+                        })
+                        .expect(201);
+
+                    expect(body.comment).toMatchObject({
+                        comment_id: 7,
+                        author: 'bainesface',
+                        review_id: 1,
+                        votes: 0,
+                        created_at: expect.any(String),
+                        body: 'just amazing'
+                    });
                 });
             });
         });

@@ -9,7 +9,6 @@ exports.handlePSQL400Errors = ((err, req, res, next) => {
         '23503',
         '23502'
     ];
-
     if (PSQLBadReqCodes.includes(err.code)) {
         res.status(400).send({ msg: 'Bad Request' });
     } else {

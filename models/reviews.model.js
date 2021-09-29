@@ -103,5 +103,9 @@ exports.updateReviewVotes = async (review_id, inc_votes) => {
         [inc_votes, review_id]
     );
 
+    if(!result.rows[0]) {
+        return Promise.reject({ status: 404, msg: 'Not Found: review does not exist' });
+    }
+
     return result.rows[0];
 }

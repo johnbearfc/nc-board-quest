@@ -29,6 +29,16 @@ exports.fetchComments = async (review_id, limit = 10, p = 1) => {
 exports.insertComment = async (review_id, newComment) => {
     const { username, body } = newComment;
 
+    const checkReviews = await db.query(
+        `SELECT * FROM reviews
+        WHERE review_id = $1;`,
+        [review_id]
+    );
+
+    if(!checkReviews.rows[0]) {
+        return Promise.reject({ status: 404, msg: 'Not Found: review does not exist' });
+    }
+
     const result = await db.query(
         `INSERT INTO comments
             (review_id, author, body)
