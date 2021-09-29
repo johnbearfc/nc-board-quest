@@ -17,7 +17,7 @@ Interacting with the API allows users to browse, post and vote on reviews and co
 
 **Requirements:**
 
-The database is created with PSQL and interaction occurs through [node-postgres](https://node-postgres.com/). Therefore `Node.js v16.6.1` and `Postgres v13.3` are recommended to run this project.
+The database is created with PSQL and interaction occurs through [node-postgres](https://node-postgres.com/). Therefore `Node.js v16.6.1` and `Postgres v13.3` or newer are required to run this project.
 
 **Setup:**
 
