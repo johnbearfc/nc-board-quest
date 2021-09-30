@@ -9,7 +9,11 @@ exports.formatEndpoints = async (listedEndpoints) => {
         {
           path: '/api/categories',
           methods: {
-            GET: []
+            GET: [],
+            POST: [
+              'slug',
+              'description'
+            ]
           }
         },
         {
@@ -37,7 +41,8 @@ exports.formatEndpoints = async (listedEndpoints) => {
             GET: [], 
             PATCH: [
               'inc_votes'
-            ] 
+            ],
+            DELETE: []
           } 
         },
         {
