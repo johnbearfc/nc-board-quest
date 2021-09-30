@@ -64,7 +64,8 @@ exports.formatEndpoints = async (listedEndpoints) => {
           methods: { 
             DELETE: [],
             PATCH: [
-              'inc_votes'
+              'inc_votes',
+              'body'
             ]
           }
         },
