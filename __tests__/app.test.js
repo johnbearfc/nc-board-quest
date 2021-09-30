@@ -310,13 +310,33 @@ describe('/api/reviews', () => {
                 expect(body.msg).toBe('Not Found: review does not exist');
             });
         });
-        describe('PATCH', () => {
+        describe.only('PATCH', () => {
             test('200 - review votes successfully updated', async () => {
                 const { body } = await request(app)
                     .patch('/api/reviews/1')
                     .send({ inc_votes : 1 })
                     .expect(200)
                 
+                expect(body.review.votes).toBe(2);
+            });
+            test('200 - review body successfully updated', async () => {
+                const { body } = await request(app)
+                    .patch('/api/reviews/1')
+                    .send({ review_body : 'updated' })
+                    .expect(200)
+                
+                expect(body.review.review_body).toBe('updated');
+            });
+            test('200 - review body AND votes successfully updated', async () => {
+                const { body } = await request(app)
+                    .patch('/api/reviews/1')
+                    .send({ 
+                        review_body : 'updated',
+                        inc_votes : 1
+                    })
+                    .expect(200)
+                
+                expect(body.review.review_body).toBe('updated');
                 expect(body.review.votes).toBe(2);
             });
             test('400 - bad request: invalid review_id format', async () => {
@@ -334,7 +354,7 @@ describe('/api/reviews', () => {
 
                 expect(body.msg).toBe('Not Found: review does not exist');
             });
-            test('400 - bad request: invalid vote format', async () => {
+            test('400 - bad request: invalid body format', async () => {
                 const { body } = await request(app)
                     .patch('/api/reviews/1')
                     .send({ inc_votes : 'dog' })
@@ -342,7 +362,7 @@ describe('/api/reviews', () => {
                 
                 expect(body.msg).toBe('Bad Request');
             });
-            test('400 - bad request: vote not included', async () => {
+            test('400 - bad request: body incomplete', async () => {
                 const { body } = await request(app)
                     .patch('/api/reviews/1')
                     .send({})

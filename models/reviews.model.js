@@ -90,17 +90,33 @@ exports.fetchReviewById = async (review_id) => {
     return result.rows[0];
 }
 
-exports.updateReviewVotes = async (review_id, inc_votes) => {
-    if (!inc_votes) {
+exports.updateReviewById = async (review_id, inc_votes, review_body) => {
+    if (!inc_votes && !review_body) {
         return Promise.reject({ status: 400, msg: 'Bad Request' });
     }
 
+    if (inc_votes) {
+        await db.query(
+            `UPDATE reviews
+            SET votes = votes + $1
+            WHERE review_id = $2;`,
+            [inc_votes, review_id]
+        );
+    }
+
+    if (review_body) {
+        await db.query(
+            `UPDATE reviews
+            SET review_body = $1
+            WHERE review_id = $2;`,
+            [review_body, review_id]
+        );
+    }
+
     const result = await db.query(
-        `UPDATE reviews
-        SET votes = votes + $1
-        WHERE review_id = $2
-        RETURNING *;`,
-        [inc_votes, review_id]
+        `SELECT * FROM reviews
+        WHERE review_id = $1;`,
+        [review_id]
     );
 
     if(!result.rows[0]) {

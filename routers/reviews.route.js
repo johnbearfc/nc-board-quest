@@ -1,7 +1,7 @@
 const express = require('express');
 const { 
     getReviewById, 
-    patchReviewVotes, 
+    patchReviewById, 
     getAllReviews,
     postReview,
     deleteReviewById
@@ -19,7 +19,7 @@ reviewsRouter.route('/')
 
 reviewsRouter.route('/:review_id')
              .get(getReviewById)
-             .patch(patchReviewVotes)
+             .patch(patchReviewById)
              .delete(deleteReviewById) 
 
 reviewsRouter.route('/:review_id/comments')

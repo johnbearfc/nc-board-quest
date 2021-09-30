@@ -1,6 +1,6 @@
 const {
     fetchReviewById,
-    updateReviewVotes, 
+    updateReviewById, 
     fetchAllReviews,
     insertReview,
     removeReviewById
@@ -42,12 +42,12 @@ exports.getReviewById = async (req, res, next) => {
     }
 }
 
-exports.patchReviewVotes = async (req, res, next) => {
+exports.patchReviewById = async (req, res, next) => {
     try {
         const { review_id } = req.params;
-        const { inc_votes } = req.body;
+        const { inc_votes, review_body } = req.body;
 
-        const review = await updateReviewVotes(review_id, inc_votes);
+        const review = await updateReviewById(review_id, inc_votes, review_body);
         res.status(200).send({ review });
     } catch (err) {
         next(err);
