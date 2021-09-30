@@ -21,6 +21,13 @@ exports.formatEndpoints = async (listedEndpoints) => {
               'category',
               'limit',
               'p'
+            ],
+            POST: [
+              'owner',
+              'title',
+              'review_body',
+              'designer',
+              'category' 
             ] 
           }
         },
