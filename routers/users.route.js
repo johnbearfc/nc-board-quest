@@ -1,13 +1,16 @@
 const express = require('express');
 const {
     getAllUsers,
-    getUserByUsername
+    getUserByUsername,
+    patchUserByUsername
 } = require('../controllers/users.controller');
 
 const usersRouter = express.Router();
 
 usersRouter.get('/', getAllUsers);
 
-usersRouter.get('/:username', getUserByUsername);
+usersRouter.route('/:username')
+           .get(getUserByUsername)
+           .patch(patchUserByUsername)
 
 module.exports = usersRouter;

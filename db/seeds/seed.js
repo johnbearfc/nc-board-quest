@@ -39,8 +39,12 @@ const seed = async (data) => {
       review_img_url TEXT DEFAULT 'https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg',
       votes INT DEFAULT 0,
       category VARCHAR(50) REFERENCES categories(slug) NOT NULL,
-      owner VARCHAR(50) references users(username) NOT NULL,
-      created_at DATE DEFAULT CURRENT_DATE
+      owner VARCHAR(50) NOT NULL,
+      created_at DATE DEFAULT CURRENT_DATE,
+      CONSTRAINT fk_owner
+        FOREIGN KEY (owner)
+        REFERENCES users(username)
+        ON UPDATE CASCADE
     );`
   );
     // comments

@@ -672,5 +672,23 @@ describe('/api/users', () => {
                 expect(body.msg).toBe('Not Found: user does not exist');
             });
         });
+        // describe.only('PATCH', () => {
+        //     test('200 - user information successfully updated', async () => {
+        //         const { body } = await request(app)
+        //             .patch('/api/users/mallionaire')
+        //             .send({
+        //                 new_username: 'mallionaire2',
+        //                 avatar_url: 'new.jpg',
+        //                 name: 'hazz'
+        //             })
+        //             .expect(200)
+
+        //         expect(body.user).toMatchObject({
+        //             username: 'mallionaire2',
+        //             avatar_url: 'new.jpg',
+        //             name: 'hazz'
+        //         })
+        //     });
+        // });
     });
 });
