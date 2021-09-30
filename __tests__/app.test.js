@@ -27,7 +27,7 @@ describe('/api', () => {
                 body.endpoints.forEach(endpoint => {
                     expect(endpoint).toMatchObject({
                         path: expect.any(String),
-                        methods: expect.any(Array)
+                        methods: expect.any(Object)
                     })
                 })
         });

@@ -8,70 +8,70 @@ exports.formatEndpoints = async (listedEndpoints) => {
     const endpoints = [
         {
           path: '/api/categories',
-          methods: [ 
-            { GET: [] } 
-          ]
+          methods: {
+            GET: []
+          }
         },
         {
           path: '/api/reviews',
-          methods: [ 
-            { GET: [
-                'sort_by',
-                'order',
-                'category',
-                'limit',
-                'p'
-            ] } 
-          ]
+          methods: { 
+            GET: [
+              'sort_by',
+              'order',
+              'category',
+              'limit',
+              'p'
+            ] 
+          }
         },
         {
           path: '/api/reviews/:review_id',
-          methods: [ 
-            { GET: [] }, 
-            { PATCH: [
-                'inc_votes'
-            ] } 
-          ]
+          methods: {
+            GET: [], 
+            PATCH: [
+              'inc_votes'
+            ] 
+          } 
         },
         {
           path: '/api/reviews/:review_id/comments',
-          methods: [ 
-            { GET: [
-                'limit',
-                'p'
-            ] },
-            { POST: [
-                'username',
-                'body'
-            ] }
-          ]
+          methods: { 
+            GET: [
+              'limit',
+              'p'
+            ],
+            POST: [
+              'username',
+              'body'
+            ]
+          }
         },
         {
           path: '/api/comments/:comment_id',
-          methods: [ 
-            { DELETE: [] },
-            { PATCH: [
-                'inc_votes'
-            ] }
-          ]
+          methods: { 
+            DELETE: [],
+            PATCH: [
+              'inc_votes'
+            ]
+          }
         },
         {
           path: '/api/users',
-          methods: [ 
-            { GET: [] } 
-          ]
+          methods: { 
+            GET: []
+          }
         },
         {
           path: '/api/users/:username',
-          methods: [ 
-            { GET: [] } 
-          ]
+          methods: { 
+            GET: []
+          }
         },
         { 
           path: '/api', 
-          methods: [ 
-            { GET: [] } 
-          ]
+          methods: { 
+            GET: []
+          }
         }
     ]
 
