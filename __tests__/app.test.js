@@ -39,7 +39,7 @@ describe('/api/categories', () => {
         test('200 - returns array of all categories', async () => {
             const { body } = await request(app)
                 .get('/api/categories')
-                .expect(200);
+                .expect(200)
 
             expect(body.categories).toHaveLength(4);
             body.categories.forEach(category => {
@@ -47,7 +47,56 @@ describe('/api/categories', () => {
                     slug: expect.any(String),
                     description: expect.any(String),
                 })
-            })
+            });
+        });
+    });
+    describe.only('POST', () => {
+        test('201 - category successfully created', async () => {
+            const { body } = await request(app)
+                .post('/api/categories')
+                .send({
+                    slug: "RPG",
+                    description: "description"   
+                })
+                .expect(201)
+
+            expect(body.category).toMatchObject({
+                slug: 'RPG',
+                description: 'description'
+            });
+        });
+        test('400 - bad request: slug already exists', async () => {
+            const { body } = await request(app)
+                .post('/api/categories')
+                .send({
+                    slug: 'euro game',
+                    description: 'description'   
+                })
+                .expect(400)
+            
+            expect(body.msg).toBe('Bad Request');    
+        });
+        test('400 - bad request: post body incomplete', async () => {
+            const { body } = await request(app)
+                .post('/api/categories')
+                .send({
+                    slug: 'RPG'
+                })
+                .expect(400)
+            
+            expect(body.msg).toBe('Bad Request');    
+        });
+        test('201 - ignores unnecessary properties', async () => {
+            const { body } = await request(app)
+                .post('/api/categories')
+                .send({
+                    slug: "RPG",
+                    description: "description",
+                    stars: 5 
+                })
+                .expect(201)
+
+            expect(body.category).toMatchObject({});
         });
     });
 });
