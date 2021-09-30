@@ -109,3 +109,20 @@ exports.updateReviewVotes = async (review_id, inc_votes) => {
 
     return result.rows[0];
 }
+
+exports.insertReview = async (newReview) => {
+    const { owner, title, review_body, designer, category } = newReview;
+
+    const result = await db.query(
+        `INSERT INTO reviews
+            (owner, title, review_body, designer, category)
+        VALUES
+            ($1, $2, $3, $4, $5)
+        RETURNING *;`,
+        [owner, title, review_body, designer, category]
+    );
+
+    result.rows[0].comment_count = 0;
+
+    return result.rows[0];
+}

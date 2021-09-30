@@ -149,6 +149,83 @@ describe('/api/reviews', () => {
             expect(body.reviews[0].review_id).toBe(3);
         });
     });
+    describe('POST', () => {
+        test('201 - review successfully posted', async () => {
+            const { body } = await request(app)
+                .post('/api/reviews')
+                .send({
+                    owner: 'bainesface',
+                    title: 'Risk',
+                    review_body: 'intense strategy',
+                    designer: 'Mr Risk',
+                    category: 'social deduction'
+                })
+                .expect(201)
+
+            expect(body.review).toMatchObject({
+                review_id: 14,
+                title: 'Risk',
+                review_body: 'intense strategy',
+                designer: 'Mr Risk',
+                review_img_url: 'https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg',
+                votes: 0,
+                category: 'social deduction',
+                owner: 'bainesface',
+                created_at: expect.any(String),
+                comment_count: 0
+            });
+        });
+        test('400 - bad request: invalid or non-existent relation', async () => {
+            const { body } = await request(app)
+                .post('/api/reviews')
+                .send({
+                    owner: 'john',
+                    title: 'Risk',
+                    review_body: 'i do not exist',
+                    designer: 'Mr Risk',
+                    category: 'social deduction'
+                })
+                .expect(400)
+            
+            expect(body.msg).toBe('Bad Request');    
+        });
+        test('400 - bad request: post body incomplete', async () => {
+            const { body } = await request(app)
+                .post('/api/reviews')
+                .send({
+                    owner: 'bainesface',
+                })
+                .expect(400)
+            
+            expect(body.msg).toBe('Bad Request');    
+        });
+        test('201 - ignores unnecessary properties', async () => {
+            const { body } = await request(app)
+                .post('/api/reviews')
+                .send({
+                    owner: 'bainesface',
+                    title: 'Risk',
+                    review_body: 'intense strategy',
+                    designer: 'Mr Risk',
+                    category: 'social deduction',
+                    stars: 5
+                })
+                .expect(201)
+
+            expect(body.review).toMatchObject({
+                review_id: 14,
+                title: 'Risk',
+                review_body: 'intense strategy',
+                designer: 'Mr Risk',
+                review_img_url: 'https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg',
+                votes: 0,
+                category: 'social deduction',
+                owner: 'bainesface',
+                created_at: expect.any(String),
+                comment_count: 0
+            });
+        });
+    });
     describe('/:review_id', () => {
         describe('GET', () => {
             test('200 - returns a correctly formatted review object with comment_count', async () => {
@@ -311,7 +388,7 @@ describe('/api/reviews', () => {
     
                     expect(body.msg).toBe('Not Found: review does not exist');
                 });
-                test('400 - bad request: invalid post format', async () => {
+                test('400 - bad request: invalid or non-existent relation', async () => {
                     const { body } = await request(app)
                         .post('/api/reviews/1/comments')
                         .send({
