@@ -64,18 +64,38 @@ exports.removeCommentById = async (comment_id) => {
     }
 }
 
-exports.updateCommentVotes = async (comment_id, inc_votes) => {
-    if (!inc_votes) {
+exports.updateCommentById = async (comment_id, inc_votes, body) => {
+    if (!inc_votes && !body) {
         return Promise.reject({ status: 400, msg: 'Bad Request' });
     }
+
+    if (inc_votes) {
+        await db.query(
+            `UPDATE comments
+            SET votes = votes + $1
+            WHERE comment_id = $2;`,
+            [inc_votes, comment_id]
+        );
+    }
     
+    if (body) {
+        await db.query(
+            `UPDATE comments
+            SET body = $1
+            WHERE comment_id = $2;`,
+            [body, comment_id]
+        );
+    }
+
     const result = await db.query(
-        `UPDATE comments
-        SET votes = votes + $1
-        WHERE comment_id = $2
-        RETURNING *;`,
-        [inc_votes, comment_id]
+        `SELECT * FROM comments
+        WHERE comment_id = $1`,
+        [comment_id]
     );
+
+    if(!result.rows[0]) {
+        return Promise.reject({ status: 404, msg: 'Not Found: comment does not exist' });
+    }
 
     return result.rows[0];
 }

@@ -310,7 +310,7 @@ describe('/api/reviews', () => {
                 expect(body.msg).toBe('Not Found: review does not exist');
             });
         });
-        describe.only('PATCH', () => {
+        describe('PATCH', () => {
             test('200 - review votes successfully updated', async () => {
                 const { body } = await request(app)
                     .patch('/api/reviews/1')
@@ -580,14 +580,43 @@ describe('/api/comments', () => {
 
                 expect(body.comment.votes).toBe(17);
             });
+            test('200 - comment body successfully updated', async () => {
+                const { body } = await request(app)
+                    .patch('/api/comments/1')
+                    .send({ body: 'updated' })
+                    .expect(200)
+
+                expect(body.comment.body).toBe('updated');
+            });
+            test('200 - comment body AND votes successfully updated', async () => {
+                const { body } = await request(app)
+                    .patch('/api/comments/1')
+                    .send({ 
+                        body: 'updated',
+                        inc_votes: 1
+                    })
+                    .expect(200)
+
+                expect(body.comment.body).toBe('updated');
+                expect(body.comment.votes).toBe(17);
+            });
             test('400 - bad request: invalid comment_id format', async () => {
                 const { body } = await request(app)
                     .patch('/api/comments/invalid')
+                    .send({ inc_votes: 1 })
                     .expect(400);
                 
                 expect(body.msg).toBe('Bad Request');
             });
-            test('400 - bad request: invalid vote format', async () => {
+            test('404 - not found: valid but non-existent comment_id', async () => {
+                const { body } = await request(app)
+                    .patch('/api/comments/666')
+                    .send({ inc_votes: 1 })
+                    .expect(404);
+                
+                expect(body.msg).toBe('Not Found: comment does not exist');
+            });
+            test('400 - bad request: invalid body format', async () => {
                 const { body } = await request(app)
                     .patch('/api/comments/1')
                     .send({ inc_votes : 'dog' })
@@ -595,7 +624,7 @@ describe('/api/comments', () => {
                 
                 expect(body.msg).toBe('Bad Request');
             });
-            test('400 - bad request: vote not included', async () => {
+            test('400 - bad request: incomplete', async () => {
                 const { body } = await request(app)
                     .patch('/api/comments/1')
                     .send({})
