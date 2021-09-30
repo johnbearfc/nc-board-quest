@@ -23,7 +23,7 @@ describe('/api', () => {
             const { body } = await request(app)
                 .get('/api')
                 .expect(200)
-
+                // console.log(body.endpoints)
                 body.endpoints.forEach(endpoint => {
                     expect(endpoint).toMatchObject({
                         path: expect.any(String),
