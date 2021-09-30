@@ -126,3 +126,16 @@ exports.insertReview = async (newReview) => {
 
     return result.rows[0];
 }
+
+exports.removeReviewById = async (review_id) => {
+    const result = await db.query(
+        `DELETE FROM reviews
+        WHERE review_id = $1
+        RETURNING *;`,
+        [review_id]
+    );
+
+    if(!result.rows[0]) {
+        return Promise.reject({ status: 404, msg: 'Not Found: review does not exist' });
+    }
+}

@@ -2,7 +2,8 @@ const {
     fetchReviewById,
     updateReviewVotes, 
     fetchAllReviews,
-    insertReview
+    insertReview,
+    removeReviewById
 } = require('../models/reviews.model')
 
 exports.getAllReviews = async (req, res, next) => {
@@ -59,6 +60,17 @@ exports.postReview = async (req, res, next) => {
 
         const review = await insertReview(newReview);
         res.status(201).send({ review });
+    } catch (err) {
+        next(err);
+    }
+}
+
+exports.deleteReviewById = async (req, res, next) => {
+    try {
+        const { review_id } = req.params;
+
+        await removeReviewById(review_id);
+        res.status(204).send({});
     } catch (err) {
         next(err);
     }

@@ -50,7 +50,7 @@ describe('/api/categories', () => {
             });
         });
     });
-    describe.only('POST', () => {
+    describe('POST', () => {
         test('201 - category successfully created', async () => {
             const { body } = await request(app)
                 .post('/api/categories')
@@ -351,6 +351,46 @@ describe('/api/reviews', () => {
                 expect(body.msg).toBe('Bad Request');
             });
         });
+        describe('DELETE', () => {
+            test('204 - deletes review by associated review_id', async () => {
+                const { body } = await request(app)
+                    .delete(`/api/reviews/1`)
+                    .expect(204)
+
+                expect(body).toEqual({});
+
+                const reviews = await db.query(
+                    `SELECT * FROM reviews;`
+                );
+    
+                expect(reviews.rows).toHaveLength(12);
+            });
+            test('400 - bad request: invalid review_id format', async () => {
+                const { body } = await request(app)
+                    .delete('/api/reviews/invalid')
+                    .expect(400);
+                
+                expect(body.msg).toBe('Bad Request');
+            });
+            test('404 - not found: valid but non-existent review_id', async () => {
+                const { body } = await request(app)
+                    .delete('/api/reviews/666')
+                    .expect(404);
+
+                expect(body.msg).toBe('Not Found: review does not exist');
+            });
+            test('204 - deletes all comments associated to the review_id', async () => {
+                const { body } = await request(app)
+                    .delete(`/api/reviews/2`)
+                    .expect(204)
+
+                const comments = await db.query(
+                    `SELECT * FROM comments;`
+                );
+    
+                expect(comments.rows).toHaveLength(3);
+            });
+        });
         describe('/comments', () => {
             describe('GET', () => {
                 test('200 - returns with first 10 comments by default for given review_id', async () => {
@@ -483,7 +523,7 @@ describe('/api/reviews', () => {
 describe('/api/comments', () => {
     describe('/:comment_id', () => {
         describe('DELETE', () => {
-            test('204 - deletes the given comment by comment_id', async () => {
+            test('204 - deletes comment by associated comment_id', async () => {
                 const { body } = await request(app)
                     .delete(`/api/comments/1`)
                     .expect(204)
@@ -503,7 +543,7 @@ describe('/api/comments', () => {
                 
                 expect(body.msg).toBe('Bad Request');
             });
-            test('404 - not found: valid but non-existent review_id', async () => {
+            test('404 - not found: valid but non-existent comment_id', async () => {
                 const { body } = await request(app)
                     .delete('/api/comments/666')
                     .expect(404);
