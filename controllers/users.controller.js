@@ -34,7 +34,6 @@ exports.patchUserByUsername = async (req, res, next) => {
         const user = await updateUserByUsername(username, updatedDetails);
         res.status(200).send({ user });
     } catch (err) {
-        console.log(err);
-        next(err)
+        next(err);
     }
 }

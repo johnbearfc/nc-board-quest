@@ -624,7 +624,7 @@ describe('/api/comments', () => {
                 
                 expect(body.msg).toBe('Bad Request');
             });
-            test('400 - bad request: incomplete', async () => {
+            test('400 - bad request: incomplete req body', async () => {
                 const { body } = await request(app)
                     .patch('/api/comments/1')
                     .send({})
@@ -672,23 +672,61 @@ describe('/api/users', () => {
                 expect(body.msg).toBe('Not Found: user does not exist');
             });
         });
-        // describe.only('PATCH', () => {
-        //     test('200 - user information successfully updated', async () => {
-        //         const { body } = await request(app)
-        //             .patch('/api/users/mallionaire')
-        //             .send({
-        //                 new_username: 'mallionaire2',
-        //                 avatar_url: 'new.jpg',
-        //                 name: 'hazz'
-        //             })
-        //             .expect(200)
+        describe('PATCH', () => {
+            test('200 - user information successfully updated', async () => {
+                const { body } = await request(app)
+                    .patch('/api/users/mallionaire')
+                    .send({
+                        new_username: 'mallionaire2',
+                        avatar_url: 'new.jpg',
+                        name: 'hazz'
+                    })
+                    .expect(200)
 
-        //         expect(body.user).toMatchObject({
-        //             username: 'mallionaire2',
-        //             avatar_url: 'new.jpg',
-        //             name: 'hazz'
-        //         })
-        //     });
-        // });
+                expect(body.user).toMatchObject({
+                    username: 'mallionaire2',
+                    avatar_url: 'new.jpg',
+                    name: 'hazz'
+                });
+            });
+            test('200 - comments and reviews table successfully updated with new username', async () => {
+                const { body } = await request(app)
+                    .patch('/api/users/mallionaire')
+                    .send({
+                        new_username: 'mallionaire2'
+                    })
+                    .expect(200)
+
+                const comments = await db.query(
+                    `SELECT * FROM comments
+                    WHERE author = 'mallionaire2';`
+                );
+                expect(comments.rows).toHaveLength(2);
+
+                const reviews = await db.query(
+                    `SELECT * FROM reviews
+                    WHERE owner = 'mallionaire2';`
+                );
+                expect(reviews.rows).toHaveLength(11);
+            });
+            test('404 - not found: non-existent user', async () => {
+                const { body } = await request(app)
+                    .patch('/api/users/john')
+                    .send({
+                        new_username: 'john2'
+                    })
+                    .expect(404)
+
+                expect(body.msg).toBe('Not Found: user does not exist');
+            });
+            test('400 - bad request: incomplete req body', async () => {
+                const { body } = await request(app)
+                    .patch('/api/users/mallionaire')
+                    .send({})
+                    .expect(400)
+
+                expect(body.msg).toBe('Bad Request');
+            });
+        });
     });
 });

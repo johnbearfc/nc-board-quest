@@ -18,7 +18,6 @@ exports.fetchUserByUsername = async (username) => {
 
     if (!result.rows[0]) {
         return Promise.reject({ status: 404, msg: 'Not Found: user does not exist' });
-
     }
 
     return result.rows[0];
@@ -27,7 +26,10 @@ exports.fetchUserByUsername = async (username) => {
 exports.updateUserByUsername = async (username, updatedDetails) => {
     const { new_username, avatar_url, name } = updatedDetails;
 
-    console.log(new_username);
+    if (!new_username && !avatar_url && !name) {
+        return Promise.reject({ status: 400, msg: 'Bad Request' });
+    }
+
     if (avatar_url) {
         await db.query(
             `UPDATE users
@@ -46,14 +48,16 @@ exports.updateUserByUsername = async (username, updatedDetails) => {
         );
     }
 
-    // if (new_username) {
-    //     await db.query(
-    //         `UPDATE users
-    //         SET username = $1
-    //         WHERE username = $2;`,
-    //         [new_username, username]
-    //     );
-    // }
+    if (new_username) {
+        await db.query(
+            `UPDATE users
+            SET username = $1
+            WHERE username = $2;`,
+            [new_username, username]
+        );
+
+        username = new_username;
+    }
 
     const result = await db.query(
         `SELECT * FROM users
@@ -61,5 +65,9 @@ exports.updateUserByUsername = async (username, updatedDetails) => {
         [username]
     );
 
-    console.log(result.rows);
+    if (!result.rows[0]) {
+        return Promise.reject({ status: 404, msg: 'Not Found: user does not exist' });
+    }
+
+    return result.rows[0];
 }
