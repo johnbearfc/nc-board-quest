@@ -1,7 +1,8 @@
 const {
     fetchAllUsers,
     fetchUserByUsername,
-    updateUserByUsername
+    updateUserByUsername,
+    insertNewUser
 } = require('../models/users.model');
 
 
@@ -33,6 +34,17 @@ exports.patchUserByUsername = async (req, res, next) => {
 
         const user = await updateUserByUsername(username, updatedDetails);
         res.status(200).send({ user });
+    } catch (err) {
+        next(err);
+    }
+}
+
+exports.postNewUser = async (req, res, next) => {
+    try {
+        const { username, avatar_url, name } = req.body;
+
+        const user = await insertNewUser(username, avatar_url, name);
+        res.status(201).send({ user });
     } catch (err) {
         next(err);
     }

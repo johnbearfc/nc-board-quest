@@ -71,3 +71,33 @@ exports.updateUserByUsername = async (username, updatedDetails) => {
 
     return result.rows[0];
 }
+
+exports.insertNewUser = async (username, avatar_url, name) => {
+    if (avatar_url) {
+        await db.query(
+            `INSERT INTO users
+                (username, avatar_url, name)
+            VALUES
+                ($1, $2, $3)
+            RETURNING *;`,
+            [username, avatar_url, name]
+        );
+    } else {
+        await db.query(
+            `INSERT INTO users
+                (username, name)
+            VALUES
+                ($1, $2)
+            RETURNING *;`,
+            [username, name]
+        );
+    }
+
+    const result = await db.query(
+        `SELECT * FROM users
+        WHERE username = $1`,
+        [username]
+    );
+
+    return result.rows[0];
+}

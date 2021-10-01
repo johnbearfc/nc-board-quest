@@ -673,6 +673,56 @@ describe('/api/users', () => {
             })
         });
     });
+    describe('POST', () => {
+        test('201 - user successfully created', async () => {
+            const { body } = await request(app)
+                .post('/api/users')
+                .send({
+                    username: 'johnbearfc',
+                    name: 'Joe'
+                })
+                .expect(201)
+
+            expect(body.user).toMatchObject({
+                username: 'johnbearfc',
+                avatar_url: 'https://images.ctfassets.net/3s5io6mnxfqz/3WeESxqINodi6TpCTIaWOG/296c6dd628371ad1e15c3594d5f33651/AdobeStock_58956623.jpeg?fm=jpg&w=900&fl=progressive',
+                name: 'Joe'
+            });
+        });
+        test('400 - bad request: user already exists', async () => {
+            const { body } = await request(app)
+                .post('/api/users')
+                .send({
+                    username: 'dav3rid',
+                    name: 'Dave'   
+                })
+                .expect(400)
+            
+            expect(body.msg).toBe('Bad Request');    
+        });
+        test('400 - bad request: post body incomplete', async () => {
+            const { body } = await request(app)
+                .post('/api/users')
+                .send({
+                    username: 'johnbearfc'
+                })
+                .expect(400)
+            
+            expect(body.msg).toBe('Bad Request');    
+        });
+        test('201 - ignores unnecessary properties', async () => {
+            const { body } = await request(app)
+                .post('/api/users')
+                .send({
+                    username: 'johnbearfc',
+                    name: 'Joe',
+                    stars: 5
+                })
+                .expect(201)
+
+            expect(body.user).toMatchObject({});
+        });
+    });
     describe('/:username', () => {
         describe('GET', () => {
             test('200 - responds with correct user object', async () => {

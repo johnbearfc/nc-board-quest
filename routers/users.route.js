@@ -2,12 +2,15 @@ const express = require('express');
 const {
     getAllUsers,
     getUserByUsername,
-    patchUserByUsername
+    patchUserByUsername,
+    postNewUser
 } = require('../controllers/users.controller');
 
 const usersRouter = express.Router();
 
-usersRouter.get('/', getAllUsers);
+usersRouter.route('/')
+           .get(getAllUsers)
+           .post(postNewUser)
 
 usersRouter.route('/:username')
            .get(getUserByUsername)
