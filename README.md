@@ -55,14 +55,20 @@ Within the project, endpoints can be navigated through `./app.js` and correspond
 ```http
 GET /api
 GET /api/categories
+POST /api/categories
+PATCH /api/comments/:comment_id
+DELETE /api/comments/:comment_id
+GET /api/reviews
+POST /api/reviews
 GET /api/reviews/:review_id
 PATCH /api/reviews/:review_id
-GET /api/reviews
+DELETE /api/reviews/:review_id
 GET /api/reviews/:review_id/comments
 POST /api/reviews/:review_id/comments
-DELETE /api/comments/:comment_id
+GET /api/reviews/:title
 GET /api/users
-PATCH /api/comments/:comment_id
+POST /api/users
+PATCH /api/users/username
 ```
 
 #### 🎲 **GET /api/categories**
@@ -71,28 +77,53 @@ Responds with board game categories
 
 <br />
 
-#### 🎲 **GET /api/reviews/:review_id**
-
-Responds with the review linked to the `review_id`
-
-<br />
-
-#### 🎲 **PATCH /api/reviews/:review_id**
-
-Allows user to change the number of votes linked to the `review_id`
+#### 🎲 **POST /api/categories**
 
 Request body accepts:
 
-- an object in the form `{ inc_votes: newVote }`
+- an object in the form:
 
-  - `newVote` will indicate how much the `votes` property in the database should be updated by, e.g.
-  
-    - `{ inc_votes : 1 }` would increment the current review's vote property by 1
-    - `{ inc_votes : -100 }` would decrement the current review's vote property by 100
+```json
+{
+  "slug": "category name here",
+  "description": "description here"
+}
+```
 
 Responds with:
 
-- the updated review
+- a category object containing the newly added category
+
+<br />
+
+#### 🎲 **PATCH /api/comments/:comment_id**
+
+Allows user to change the body and/or number of votes linked to the `comment_id`
+
+Request body accepts:
+
+- an object in the form:
+```json
+{
+  "inc_votes": "newVote",
+  "body": "comment here"
+}
+```
+
+  - `newVote` will indicate how much the `votes` property in the database should be updated by, e.g.
+  
+    - `{ inc_votes : 1 }` would increment the current comment's vote property by 1
+    - `{ inc_votes : -100 }` would decrement the current comment's vote property by 100
+
+Responds with:
+
+- the updated comment
+
+<br />
+
+#### 🎲 **DELETE /api/comments/:comment_id**
+
+Deletes the given comment by `comment_id`
 
 <br />
 
@@ -107,6 +138,71 @@ Accepts queries:
 - `category`, which filters the reviews by the category value specified in the query
 - `limit`, which limits the number of responses (defaults to 10)
 - `p`, specifies the page at which to start
+
+<br />
+
+#### 🎲 **POST /api/reviews**
+
+Request body accepts:
+
+- an object with the following properties:
+
+  - `owner` which is the `username` from the users table
+  - `title`
+  - `review_body`
+  - `designer`
+  - `category` which is a `category` from the categories table
+
+Responds with:
+
+- the newly added review, with all the above properties as well as:
+  - `review_id`
+  - `votes`
+  - `created_at`
+  - `comment_count`
+
+<br />
+
+#### 🎲 **GET /api/reviews/:review_id**
+
+Responds with the review linked to the `review_id`
+
+<br />
+
+#### 🎲 **PATCH /api/reviews/:review_id**
+
+Allows user to change the body and/or number of votes linked to the `review_id`
+
+Request body accepts:
+
+- an object in the form:
+```json
+{
+  "inc_votes": "newVote",
+  "review_body": "review here"
+}
+```
+
+  - `newVote` will indicate how much the `votes` property in the database should be updated by, e.g.
+  
+    - `{ inc_votes : 1 }` would increment the current review's vote property by 1
+    - `{ inc_votes : -100 }` would decrement the current review's vote property by 100
+
+Responds with:
+
+- the updated review
+
+<br />
+
+#### 🎲 **DELETE /api/reviews/:review_id**
+
+Should:
+
+- delete the given review by review_id
+
+Respond with:
+
+- status 204 and no content
 
 <br />
 
@@ -135,9 +231,9 @@ Responds with:
 
 <br />
 
-#### 🎲 **DELETE /api/comments/:comment_id**
+#### 🎲 **GET /api/reviews/:title**
 
-Deletes the given comment by `comment_id`
+Responds with the review linked to the `title`
 
 <br />
 
@@ -147,22 +243,43 @@ Responds with all users
 
 <br />
 
-#### 🎲 **PATCH /api/comments/:comment_id**
-
-Allows user to change the number of votes linked to the `comment_id`
+#### 🎲 **POST /api/users**
 
 Request body accepts:
 
-- an object in the form `{ inc_votes: newVote }`
-
-  - `newVote` will indicate how much the `votes` property in the database should be updated by, e.g.
-  
-    - `{ inc_votes : 1 }` would increment the current comment's vote property by 1
-    - `{ inc_votes : -100 }` would decrement the current comment's vote property by 100
+- an object in the form:
+```json
+{
+  "username": "new username",
+  "avatar_url": "new url",
+  "name": "new name"
+}
+```
 
 Responds with:
 
-- the updated comment
+- the newly created user
+
+<br />
+
+#### 🎲 **PATCH /api/users/:username**
+
+Allows user to edit the details of a user linked to the `username`
+
+Request body accepts:
+
+- an object in the form:
+```json
+{
+  "username": "new username",
+  "avatar_url": "new url",
+  "name": "new name"
+}
+```
+
+Responds with:
+
+- the updated user
 
 <br />
 
