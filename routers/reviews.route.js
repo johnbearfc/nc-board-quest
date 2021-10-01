@@ -4,7 +4,8 @@ const {
     patchReviewById, 
     getAllReviews,
     postReview,
-    deleteReviewById
+    deleteReviewById,
+    getReviewByTitle
 } = require('../controllers/reviews.controller');
 const { 
     getComments, 
@@ -25,6 +26,8 @@ reviewsRouter.route('/:review_id')
 reviewsRouter.route('/:review_id/comments')
              .get(getComments)
              .post(postComment)   
+
+reviewsRouter.get('/:title', getReviewByTitle);
 
 
 module.exports = reviewsRouter;

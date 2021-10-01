@@ -277,30 +277,23 @@ describe('/api/reviews', () => {
     });
     describe('/:review_id', () => {
         describe('GET', () => {
-            test('200 - returns a correctly formatted review object with comment_count', async () => {
+            test('200 - returns a correct review including comment_count, by associated review_id', async () => {
                 const { body } = await request(app)
                     .get('/api/reviews/2')
                     .expect(200);
 
                 expect(body.review).toMatchObject({
                     review_id: 2,
-                    title: expect.any(String),
+                    title: 'Jenga',
                     review_body: expect.any(String),
-                    designer: expect.any(String),
+                    designer: 'Leslie Scott',
                     review_img_url: expect.any(String),
-                    votes: expect.any(Number),
-                    category: expect.any(String),
-                    owner: expect.any(String),
+                    votes: 5,
+                    category: 'dexterity',
+                    owner: 'philippaclaire9',
                     created_at: expect.any(String),
                     comment_count: 3
                 })
-            });
-            test('400 - bad request: invalid review_id format', async () => {
-                const { body } = await request(app)
-                    .get('/api/reviews/invalid')
-                    .expect(400);
-                
-                expect(body.msg).toBe('Bad Request');
             });
             test('404 - not found: valid but non-existent review_id', async () => {
                 const { body } = await request(app)
@@ -535,6 +528,35 @@ describe('/api/reviews', () => {
                         body: 'just amazing'
                     });
                 });
+            });
+        });
+    });
+    describe('/:title', () => {
+        describe('GET', () => {
+            test('200 - returns a correct review including comment_count, by associated title', async () => {
+                const { body } = await request(app)
+                    .get('/api/reviews/jenga')
+                    .expect(200);
+
+                expect(body.review).toMatchObject({
+                    review_id: 2,
+                    title: 'Jenga',
+                    review_body: expect.any(String),
+                    designer: 'Leslie Scott',
+                    review_img_url: expect.any(String),
+                    votes: 5,
+                    category: 'dexterity',
+                    owner: 'philippaclaire9',
+                    created_at: expect.any(String),
+                    comment_count: 3
+                });
+            });
+            test('404 - not found: non-existed review title', async () => {
+                const { body } = await request(app)
+                    .get('/api/reviews/notagame')
+                    .expect(404);
+                
+                expect(body.msg).toBe('Not Found: review does not exist');
             });
         });
     });

@@ -155,3 +155,22 @@ exports.removeReviewById = async (review_id) => {
         return Promise.reject({ status: 404, msg: 'Not Found: review does not exist' });
     }
 }
+
+exports.fetchReviewByTitle = async (title) => {
+    const result = await db.query(
+        `SELECT reviews.*, count(comments.comment_id) as comment_count FROM reviews 
+        LEFT JOIN comments 
+        ON reviews.review_id = comments.review_id
+        WHERE LOWER(reviews.title) = LOWER($1)
+        GROUP BY reviews.review_id;`, 
+        [title]
+    );
+
+    if(!result.rows[0]) {
+        return Promise.reject({ status: 404, msg: 'Not Found: review does not exist' });
+    }
+
+    result.rows[0].comment_count = Number(result.rows[0].comment_count);
+
+    return result.rows[0];
+}

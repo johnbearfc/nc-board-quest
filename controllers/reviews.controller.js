@@ -3,7 +3,8 @@ const {
     updateReviewById, 
     fetchAllReviews,
     insertReview,
-    removeReviewById
+    removeReviewById,
+    fetchReviewByTitle
 } = require('../models/reviews.model')
 
 exports.getAllReviews = async (req, res, next) => {
@@ -35,8 +36,12 @@ exports.getReviewById = async (req, res, next) => {
     try { 
         const { review_id } = req.params;
 
-        const review = await fetchReviewById(review_id);
-        res.status(200).send({ review });
+        if (!Number(review_id)) {
+            next();
+        } else {
+            const review = await fetchReviewById(review_id);
+            res.status(200).send({ review });
+        }
     } catch (err) {
         next(err);
     }
@@ -72,6 +77,18 @@ exports.deleteReviewById = async (req, res, next) => {
         await removeReviewById(review_id);
         res.status(204).send({});
     } catch (err) {
+        next(err);
+    }
+}
+
+exports.getReviewByTitle = async (req, res, next) => {
+    try {
+        const { title } = req.params;
+
+        const review = await fetchReviewByTitle(title);
+        res.status(200).send({ review });
+    } catch (err) {
+        // console.log(err);
         next(err);
     }
 }
