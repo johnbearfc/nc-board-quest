@@ -1,8 +1,8 @@
 
 exports.formatEndpoints = async (listedEndpoints) => {
-    // log current endpoints 
-                // |||||||||
-                // vvvvvvvvv
+    // uncomment to log current endpoints 
+    // |||||||||
+    // vvvvvvvvv
     // console.log(listedEndpoints);
 
     const endpoints = [
@@ -78,7 +78,12 @@ exports.formatEndpoints = async (listedEndpoints) => {
         {
           path: '/api/users/:username',
           methods: { 
-            GET: []
+            GET: [],
+            PATCH: [
+              'username',
+              'avatar_url',
+              'name'
+            ]
           }
         },
         { 
