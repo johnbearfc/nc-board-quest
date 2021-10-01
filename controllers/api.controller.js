@@ -78,7 +78,12 @@ exports.formatEndpoints = async (listedEndpoints) => {
         {
           path: '/api/users',
           methods: { 
-            GET: []
+            GET: [],
+            POST: [
+              'username',
+              'avatar_url',
+              'name'
+            ]
           }
         },
         {
