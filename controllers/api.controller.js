@@ -60,6 +60,12 @@ exports.formatEndpoints = async (listedEndpoints) => {
           }
         },
         {
+          path: '/api/reviews/:title',
+          methods: { 
+            GET: []
+          }
+        },
+        {
           path: '/api/comments/:comment_id',
           methods: { 
             DELETE: [],
