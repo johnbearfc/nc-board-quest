@@ -51,7 +51,7 @@ const seed = async (data) => {
   await db.query(
     `CREATE TABLE comments (
       comment_id SERIAL PRIMARY KEY,
-      author VARCHAR(50) references users(username) NOT NULL,
+      author VARCHAR(50) NOT NULL,
       review_id INT NOT NULL,
       votes INT DEFAULT 0,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -59,7 +59,11 @@ const seed = async (data) => {
       CONSTRAINT fk_review_id
         FOREIGN KEY (review_id)
         REFERENCES reviews(review_id)
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
+      CONSTRAINT fk_author
+        FOREIGN KEY (author)
+        REFERENCES users(username)
+        ON UPDATE CASCADE
     );`
   );
 
