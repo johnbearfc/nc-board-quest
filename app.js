@@ -3,6 +3,9 @@ const apiRouter = require('./routers/api.route');
 const listEndPoints = require('express-list-endpoints');
 const { InvalidURL, handlePSQL400Errors, handleCustomErrors, handle500Errors } = require('./err/error_handling');
 const { formatEndpoints } = require('./controllers/api.controller');
+const cors = require('cors');
+
+app.use(cors());
 
 const app = express();
 app.use(express.json());
