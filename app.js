@@ -5,9 +5,9 @@ const { InvalidURL, handlePSQL400Errors, handleCustomErrors, handle500Errors } =
 const { formatEndpoints } = require('./controllers/api.controller');
 const cors = require('cors');
 
-app.use(cors());
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 app.use('/api', apiRouter);
