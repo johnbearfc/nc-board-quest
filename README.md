@@ -2,7 +2,7 @@
 
 Welcome to the Board Quest API, a portfolio project designed to emulate a real world backend service.
 
-Board Quest allows table top enthusiasts to explore the world of board games together and speak of their tales along the way. 
+Board Quest allows table top enthusiasts to explore the world of board games together and speak of their tales along the way.
 
 Interacting with the API allows users to browse, post and vote on reviews and comments.
 
@@ -11,7 +11,14 @@ Interacting with the API allows users to browse, post and vote on reviews and co
 ### Heroku App:
 
 #### [nc-board-quest.herokuapp.com/api](https://nc-board-quest.herokuapp.com/api)
---- 
+
+---
+
+### Front End:
+
+#### [github.com/johnbearfc/nc-games](https://github.com/johnbearfc/nc-games)
+
+---
 
 ## Exploring the Project
 
@@ -23,32 +30,36 @@ The database is created with PSQL and interaction occurs through [node-postgres]
 
 1. Fork and clone this repository
 
-2. Install all dependencies: 
-    * `npm install`   
-    <br />
+2. Install all dependencies:
 
-3. Create _two_ `.env` files: `.env.test` and `.env.development`. Into each, add `PGDATABASE=<database_name_here>`, with the correct database name for that environment (see `/db/setup.sql` for the database names).    
+   - `npm install`  
+     <br />
+
+3. Create _two_ `.env` files: `.env.test` and `.env.development`. Into each, add `PGDATABASE=<database_name_here>`, with the correct database name for that environment (see `/db/setup.sql` for the database names).
 
 4. Connect to the database:
-    * `npm run setup-dbs`
 
-    <br />
+   - `npm run setup-dbs`
+
+   <br />
 
 5. Seeding development data:
-    * `npm run seed` 
-    
-    <br />
+
+   - `npm run seed`
+
+   <br />
 
 6. Seeding and testing test data:
-    * `npm test app`
 
-    <br />
+   - `npm test app`
+
+   <br />
 
 ---
 
 ## Endpoints
 
-All available endpoints can be viewed on the Heroku app with `/api`. 
+All available endpoints can be viewed on the Heroku app with `/api`.
 
 Within the project, endpoints can be navigated through `./app.js` and corresponding files in the `./routers` folder.
 
@@ -103,6 +114,7 @@ Allows user to change the body and/or number of votes linked to the `comment_id`
 Request body accepts:
 
 - an object in the form:
+
 ```json
 {
   "inc_votes": "newVote",
@@ -110,10 +122,10 @@ Request body accepts:
 }
 ```
 
-  - `newVote` will indicate how much the `votes` property in the database should be updated by, e.g.
-  
-    - `{ inc_votes : 1 }` would increment the current comment's vote property by 1
-    - `{ inc_votes : -100 }` would decrement the current comment's vote property by 100
+- `newVote` will indicate how much the `votes` property in the database should be updated by, e.g.
+
+  - `{ inc_votes : 1 }` would increment the current comment's vote property by 1
+  - `{ inc_votes : -100 }` would decrement the current comment's vote property by 100
 
 Responds with:
 
@@ -176,6 +188,7 @@ Allows user to change the body and/or number of votes linked to the `review_id`
 Request body accepts:
 
 - an object in the form:
+
 ```json
 {
   "inc_votes": "newVote",
@@ -183,10 +196,10 @@ Request body accepts:
 }
 ```
 
-  - `newVote` will indicate how much the `votes` property in the database should be updated by, e.g.
-  
-    - `{ inc_votes : 1 }` would increment the current review's vote property by 1
-    - `{ inc_votes : -100 }` would decrement the current review's vote property by 100
+- `newVote` will indicate how much the `votes` property in the database should be updated by, e.g.
+
+  - `{ inc_votes : 1 }` would increment the current review's vote property by 1
+  - `{ inc_votes : -100 }` would decrement the current review's vote property by 100
 
 Responds with:
 
@@ -248,6 +261,7 @@ Responds with all users
 Request body accepts:
 
 - an object in the form:
+
 ```json
 {
   "username": "new username",
@@ -269,6 +283,7 @@ Allows user to edit the details of a user linked to the `username`
 Request body accepts:
 
 - an object in the form:
+
 ```json
 {
   "username": "new username",
